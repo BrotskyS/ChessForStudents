@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class GameViewModel: ObservableObject {
     let game: Game
@@ -22,17 +23,27 @@ class GameViewModel: ObservableObject {
     }
     
     func selectPosition(_ position: Position) {
-        if selectPosition == position {
-            selectPosition = nil
+        
+        if let from = selectPosition {
+    
+            if allowedMove.contains(position) {
+                withAnimation {
+                    game.move(from: from, to: position)
+                    allowedMove = []
+                    selectPosition = nil
+                }
+                return
+            }
+            
             allowedMove = []
+            selectPosition = nil
             return
         }
         
         if game.board.pieces[position.rawValue] != nil {
             selectPosition = position
+            selectAllowedMove(from: position)
         }
-        
-        selectAllowedMove(from: position)
     }
     
     func selectAllowedMove(from position: Position) {

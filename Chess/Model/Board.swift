@@ -8,7 +8,7 @@
 import Foundation
 
 struct Board {
-    private(set) var pieces: [Piece?] = Array(repeating: nil, count: 64)
+    var pieces: [Piece?] = Array(repeating: nil, count: 64)
     
     init() {
         defaultSetup()
@@ -44,10 +44,22 @@ struct Board {
     }
     
     subscript(x: Int, y: Int) -> Piece? {
-        pieces[0]
+        guard x < 8, y < 8 else { return nil }
+        
+        return pieces[x * 8 + y]
     }
     
     func getPiece(x: Int, y: Int) -> Piece? {
         pieces[0]
+    }
+    
+    mutating
+    func movePiece(from: Position, to: Position) {
+        guard from != to, self[from] != nil else {
+            return
+        }
+        
+        pieces.swapAt(from.rawValue, to.rawValue)
+        pieces[from.rawValue] = nil
     }
 }

@@ -12,6 +12,7 @@ struct CellView: View {
     let piece: Piece?
     let isSelected: Bool
     var canMove: Bool
+    let imageNamespace: Namespace.ID
     var onTap: () -> Void
     
     var body: some View {
@@ -31,6 +32,7 @@ struct CellView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .padding(6)
+                    .matchedGeometryEffect(id: piece.id, in: imageNamespace)
             }
             
             if canMove {
